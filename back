@@ -1,0 +1,27 @@
+const net = require('net');
+
+const server = net.createServer((socket) => {
+  console.log(`Cliente conectado: ${socket.remoteAddress}:${socket.remotePort}`);
+  console.log(`teste: ${socket.remotePort}`)
+
+  // Define o encoding para receber mensagens como strings
+  socket.setEncoding('utf8');
+
+  // Escuta o evento 'data' para receber mensagens do cliente
+  socket.on('data', (data) => {
+    console.log(`Mensagem recebida de ${socket.remoteAddress}:${socket.remotePort}: ${data}`);
+    
+    // Envia uma mensagem de volta para o cliente
+    socket.write(`Mensagem recebida: ${data}`);
+  });
+
+  // Escuta o evento 'end' para quando o cliente desconectar
+  socket.on('end', () => {
+    console.log(`Cliente desconectado: ${socket.remoteAddress}:${socket.remotePort}`);
+  });
+});
+
+// Inicia o servidor na porta 8080
+server.listen(8080, () => {
+  console.log('Servidor TCP iniciado na porta 8080.');
+});
